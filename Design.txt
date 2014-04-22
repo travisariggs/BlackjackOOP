@@ -43,7 +43,9 @@ Possible Classes:
     var Hand of Cards
 
     method Calculate Hand
+    method Determine Status of Hand
     method Decide when to hit or stay
+    method Show Cards...but not all of them (and possibly the total)
 
   class Player
 
@@ -52,4 +54,6 @@ Possible Classes:
     var Current Bet
 
     method Calculate Hand
+    method Determine Status of Hand
     method Request a hit
+    method Show Cards (and total)
