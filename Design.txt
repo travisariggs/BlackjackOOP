@@ -1,0 +1,55 @@
+Blackjack Game Design:
+Travis Riggs
+4/21/2014
+
+Nouns:
+  Dealer
+  Player
+  Card
+  Deck
+  Shoe
+
+Verbs:
+  Deal
+  Show cards
+  Calculate Hand
+  Ask to hit or stay
+  Bet (or ask for bet)
+
+
+Possible Classes:
+
+  class Card:
+
+    var Suit
+    var Face Value
+
+  class Deck:
+
+    var Array of 52 Cards
+
+    method Shuffle
+
+  class Shoe:
+
+    var Array of Decks
+
+    method Shuffle
+    method Deal a Card
+
+
+  class Dealer:
+
+    var Hand of Cards
+
+    method Calculate Hand
+    method Decide when to hit or stay
+
+  class Player
+
+    var Hand of Cards
+    var Money available
+    var Current Bet
+
+    method Calculate Hand
+    method Request a hit
