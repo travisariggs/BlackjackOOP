@@ -10,10 +10,13 @@ class Card
     @face = face.to_s
   end
 
+  def show
+    "#{face} of #{suit}s"
+  end
+
 end
 
 class Shoe
-
 
   def initialize(num_of_decks)
     # Input:
@@ -21,7 +24,15 @@ class Shoe
     @cards = []
   end
 
-  def shuffle
+  def num_of_cards
+
+  end
+
+  def has_card?(card)
+    # This is used for unit testing purposes
+  end
+
+  def shuffle_cards
 
   end
 
@@ -38,7 +49,7 @@ module HandleCards
 
   end
 
-  def get_hand_status(hand)
+  def hand_status?(hand)
 
   end
 
@@ -70,5 +81,14 @@ class Player
   def show_hand
 
   end
+
+end
+
+########## Main Program ##################
+if __FILE__ == $0
+
+  card = Card.new('Heart', '4')
+
+  puts card.show
 
 end

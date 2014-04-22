@@ -71,64 +71,9 @@ class TestCalculateHand < Test::Unit::TestCase
 end
 
 
-class TestShuffle < Test::Unit::TestCase
-
-  # def setup
-  # end
-
-  # def teardown
-  # end
-
-  def test_length
-    shoe = create_shoe(2)
-    assert_equal(104, shoe.length)
-  end
-
-  def test_shuffle_array
-    an_array = (1..100).to_a
-    assert_not_equal(an_array, shuffle_cards(an_array))
-  end
-
-  def test_shuffled_shoe
-
-    a_shoe = []
-
-    # Create a 2-deck ordered shoe of cards
-    2.times do
-
-      [ 'Club', 'Diamond', 'Heart', 'Spade'].each do |suit|
-
-        ((2..10).to_a + ['Jack', 'Queen', 'King', 'Ace']).each do |card|
-
-          # Insert a hash of the card value and the suit
-          a_shoe << {suit: suit, value: card}
-
-        end
-
-      end
-
-    end
-
-    shuffled_shoe = create_shoe(2)
-
-    assert_not_equal(a_shoe, shuffled_shoe)
-
-  end
-
-end
-
-
-class TestCreateShoe < Test::Unit::TestCase
-
-  def test_1_deck_length
-    shoe = create_shoe(1)
-    assert_equal(52, shoe.length)
-  end
-
-end
-
-
 class TestHandStatus < Test::Unit::TestCase
+
+  include HandleCards
 
   def test_blackjack
     assert_equal('Blackjack', hand_status?(21))
@@ -147,3 +92,82 @@ class TestHandStatus < Test::Unit::TestCase
   end
 
 end
+
+
+class TestShuffle < Test::Unit::TestCase
+
+  # def setup
+  # end
+
+  # def teardown
+  # end
+
+  def test_length
+    shoe = Shoe.new(2)
+    assert_equal(104, shoe.num_of_cards)
+  end
+
+  def test_ordered_and_shuffled_shoe
+    ordered_shoe = Shoe.new(2)
+    shuffled_shoe = Shoe.new(2)
+    shuffled_shoe.shuffle_cards
+
+    assert_not_equal(ordered_shoe, shuffled_shoe)
+  end
+
+  def test_check_all_cards_in_shuffled_shoe
+
+    # Initialize expected result of true array
+    expected = Array.new(52, true)
+    # Intialize actual result as false array
+    actual = Array.new(52, false)
+
+    shoe = Shoe.new(1)
+
+    i = 0
+
+    # Create a 2-deck ordered shoe of cards
+    [ 'Club', 'Diamond', 'Heart', 'Spade' ].each do |suit|
+
+      ((2..10).to_a + ['Jack', 'Queen', 'King', 'Ace']).each do |card|
+
+        card = Card.new(suit, card.to_s)
+
+        # Does the shoe have this card?
+        if shoe.has_card? card
+          actual[i] = true
+        end
+
+        i += 1
+
+      end
+
+    end
+
+    assert_equal(expected, actual)
+
+  end
+
+end
+
+
+class TestCreateShoe < Test::Unit::TestCase
+
+  def test_1_deck_length
+    shoe = Shoe.new(1)
+    assert_equal(52, shoe.num_of_cards)
+  end
+
+  def test_2_deck_length
+    shoe = Shoe.new(2)
+    assert_equal(2*52, shoe.num_of_cards)
+  end
+
+  def test_6_deck_length
+    shoe = Shoe.new(6)
+    assert_equal(6*52, shoe.num_of_cards)
+  end
+
+end
+
+
