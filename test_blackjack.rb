@@ -6,66 +6,60 @@ class TestCalculateHand < Test::Unit::TestCase
 
   include HandleCards
 
-  # def setup
-  # end
+  def setup
+    @a_hand = Hand.new
+  end
 
   # def teardown
   # end
 
   def test_king_8
-    the_hand = [
-      { value: 'King', suit: 'Spade'},
-      { value:      8, suit: 'Heart'}
-    ]
+    @a_hand.add_card(Card.new('King', 'Spade'))
+    @a_hand.add_card(Card.new('8', 'Heart'))
 
-    assert_equal(18, calculate_hand(the_hand))
+    assert_equal(18, calculate_hand(@a_hand))
   end
 
   def test_jack_queen
-    the_hand = [
-        { value:  'Jack', suit: 'Club'  },
-        { value: 'Queen', suit: 'Heart' }
-    ]
-    assert_equal(20, calculate_hand(the_hand))
+    @a_hand.add_card(Card.new('Jack', 'Club'))
+    @a_hand.add_card(Card.new('Queen', 'Heart'))
+
+    assert_equal(20, calculate_hand(@a_hand))
   end
 
   def test_10_ace
-    the_hand = [
-        { value:    10, suit: 'Club'  },
-        { value: 'Ace', suit: 'Heart' }
-    ]
-    assert_equal(21, calculate_hand(the_hand))
+    @a_hand.add_card(Card.new('10', 'Club'))
+    @a_hand.add_card(Card.new('Ace', 'Heart'))
+
+    assert_equal(21, calculate_hand(@a_hand))
   end
 
   def test_ace_5_10
-    the_hand = [
-        { value: 'Ace', suit: 'Heart'   },
-        { value:     5, suit: 'Diamond' },
-        { value:    10, suit: 'Club'    },
-    ]
-    assert_equal(16, calculate_hand(the_hand))
+    @a_hand.add_card(Card.new('Ace', 'Heart'))
+    @a_hand.add_card(Card.new('5', 'Diamond'))
+    @a_hand.add_card(Card.new('10', 'Club'))
+
+    assert_equal(16, calculate_hand(@a_hand))
   end
 
   def test_ace_ace_10_7
-    the_hand = [
-        { value: 'Ace', suit: 'Heart'   },
-        { value: 'Ace', suit: 'Diamond' },
-        { value:    10, suit: 'Club'    },
-        { value:     7, suit: 'Club'    }
-    ]
-    assert_equal(19, calculate_hand(the_hand))
+    @a_hand.add_card(Card.new('Ace', 'Heart'))
+    @a_hand.add_card(Card.new('Ace', 'Diamond'))
+    @a_hand.add_card(Card.new('10',  'Club'))
+    @a_hand.add_card(Card.new('7',   'Club'))
+
+    assert_equal(19, calculate_hand(@a_hand))
   end
 
   def test_ace_ace_ace_ace_10_9
-    the_hand = [
-        { value: 'Ace', suit: 'Heart'   },
-        { value: 'Ace', suit: 'Diamond' },
-        { value: 'Ace', suit: 'Spade'   },
-        { value: 'Ace', suit: 'Club'    },
-        { value:    10, suit: 'Club'    },
-        { value:     9, suit: 'Heart'   }
-    ]
-    assert_equal(23, calculate_hand(the_hand))
+    @a_hand.add_card(Card.new('Ace', 'Heart'))
+    @a_hand.add_card(Card.new('Ace', 'Diamond'))
+    @a_hand.add_card(Card.new('Ace', 'Spade'))
+    @a_hand.add_card(Card.new('Ace', 'Club'))
+    @a_hand.add_card(Card.new('10',  'Club'))
+    @a_hand.add_card(Card.new('9',   'Heart'))
+
+    assert_equal(23, calculate_hand(@a_hand))
   end
 
 end
@@ -109,8 +103,8 @@ class TestShuffle < Test::Unit::TestCase
 
   def test_ordered_and_shuffled_shoe
     ordered_shoe = Shoe.new(2)
+    ordered_shoe.fill_shoe(2)
     shuffled_shoe = Shoe.new(2)
-    shuffled_shoe.shuffle_cards
 
     assert_not_equal(ordered_shoe, shuffled_shoe)
   end
