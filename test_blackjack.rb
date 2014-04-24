@@ -13,6 +13,15 @@ class TestCalculateHand < Test::Unit::TestCase
   # def teardown
   # end
 
+  def test_player_calc
+    p = Player.new('Travis')
+
+    p.add_card(Card.new('King', 'Spade'))
+    p.add_card(Card.new('7', 'Club'))
+
+    assert_equal(17, p.calculate_hand(p.hand))
+  end
+
   def test_king_8
     @a_hand.add_card(Card.new('King', 'Spade'))
     @a_hand.add_card(Card.new('8', 'Heart'))
@@ -125,7 +134,7 @@ class TestShuffle < Test::Unit::TestCase
 
       ((2..10).to_a + ['Jack', 'Queen', 'King', 'Ace']).each do |card|
 
-        card = Card.new(suit, card.to_s)
+        card = Card.new(card.to_s, suit)
 
         # Does the shoe have this card?
         if shoe.has_card? card

@@ -1,21 +1,21 @@
 class Card
 
-  attr_reader :face, :suit
+  attr_reader :value, :suit
 
-  def initialize(face, suit)
+  def initialize(value, suit)
     # Input:
     #  face = 'Ace', 'King', 'Queen', 'Jack', 1', '2', '3', '4'...
     #  suit = "Club", Diamond", "Heart" or "Spade"
-    @face = face.to_s
+    @value = value.to_s
     @suit = suit.to_s
   end
 
   def show
-    "#{face} of #{suit}s"
+    "#{value} of #{suit}s"
   end
 
   def eql?(another_card)
-    suit == another_card.suit && face == another_card.face
+    suit == another_card.suit && value == another_card.value
   end
 
 end
@@ -36,7 +36,7 @@ class Shoe
       [ 'Club', 'Diamond', 'Heart', 'Spade'].each do |suit|
         ((2..10).to_a + ['Jack', 'Queen', 'King', 'Ace']).each do |card|
           # Append a Card object
-          @cards << Card.new(suit, card)
+          @cards << Card.new(card, suit)
         end
       end
     end
@@ -51,7 +51,7 @@ class Shoe
     # This is used for unit testing purposes
     # @cards.include?(card)
     @cards.each do |a_card|
-      if card.suit == a_card.suit && card.face == a_card.face
+      if card.suit == a_card.suit && card.value == a_card.value
         return true
       end
     end
@@ -90,12 +90,12 @@ module HandleCards
 
     hand.each do |card|
 
-      if ['King', 'Queen', 'Jack'].include?(card.face)
+      if ['King', 'Queen', 'Jack'].include?(card.value)
         total += 10
-      elsif card.face == 'Ace'
+      elsif card.value == 'Ace'
         ace_count += 1
       else
-        total += card.face.to_i
+        total += card.value.to_i
       end
 
     end
@@ -211,7 +211,7 @@ class Player
     puts
     puts "   #{name}'s hand is: #{total}"
 
-    hand.each_with_index { | card, index |
+    @hand.each_with_index { | card, index |
 
       puts ' '*10 + "  #{ card[:value] } of #{ card[:suit] }'s"
 
@@ -246,7 +246,7 @@ if __FILE__ == $0
   #
   # puts
 
-  d = Dealer.new
+  # d = Dealer.new
   #d.show_hand
 
   p = Player.new('Travis')
@@ -255,17 +255,20 @@ if __FILE__ == $0
   # Create shoe
   shoe = Shoe.new(2)
 
-  puts shoe.deal_a_card!
+  c = shoe.deal_a_card!
+  puts "#{c.value} of #{c.suit}"
 
   # Deal cards
-  d.add_card(shoe.deal_a_card!)
+  # d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
-  d.add_card(shoe.deal_a_card!)
+  # d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
   p.show_hand
-  d.show_hand
+
+  puts p.calculate_hand(p.hand)
+  #d.show_hand
 
 
 
