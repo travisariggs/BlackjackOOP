@@ -78,6 +78,53 @@ class Hand < Array
     self
   end
 
+  def calculate
+
+    total = 0
+    ace_count = 0
+
+    self.each do |card|
+
+      if ['King', 'Queen', 'Jack'].include?(card.value)
+        total += 10
+      elsif card.value == 'Ace'
+        ace_count += 1
+      else
+        total += card.value.to_i
+      end
+
+    end
+
+    # Add the Aces as 11's
+    total += ace_count * 11
+
+    # Check to see if it's a bust
+    #  and reduce the '11' to a '1'
+    #  until we run out of aces or
+    #  the total goes 21 or below
+    if total > 21
+
+      ace_count.times do
+
+        # Change the 11 to a 1
+        total -= 10
+
+        # Check the total again
+        if total <= 21
+          break
+        end
+
+      end
+
+    end
+
+    # We've now changed as many aces
+    #  to values of 1's that we could,
+    #  (if we had any at all)
+    total
+
+  end
+
 end
 
 
@@ -176,7 +223,7 @@ class Dealer
       if mask && index == 1
         puts ' '*10 + " *** Hidden Card *** "
       else
-        puts ' '*10 + "  #{ card[:value] } of #{ card[:suit] }'s"
+        puts ' '*10 + "  #{ card.value } of #{ card.suit }'s"
       end
     }
 
@@ -211,9 +258,9 @@ class Player
     puts
     puts "   #{name}'s hand is: #{total}"
 
-    @hand.each_with_index { | card, index |
+    @hand.each { | card |
 
-      puts ' '*10 + "  #{ card[:value] } of #{ card[:suit] }'s"
+      puts ' '*10 + "  #{ card.value } of #{ card.suit }'s"
 
     }
 
@@ -246,28 +293,27 @@ if __FILE__ == $0
   #
   # puts
 
-  # d = Dealer.new
-  #d.show_hand
+  d = Dealer.new
+  d.show_hand
 
   p = Player.new('Travis')
-  #p.show_hand
+  p.show_hand
 
   # Create shoe
   shoe = Shoe.new(2)
 
-  c = shoe.deal_a_card!
-  puts "#{c.value} of #{c.suit}"
-
   # Deal cards
-  # d.add_card(shoe.deal_a_card!)
+  d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
-  # d.add_card(shoe.deal_a_card!)
+  d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
+  d.show_hand
   p.show_hand
 
-  puts p.calculate_hand(p.hand)
+  puts p.hand.calculate
+
   #d.show_hand
 
 
