@@ -5,7 +5,7 @@ require_relative 'blackjack'
 class TestCalculateHand < Test::Unit::TestCase
 
   def setup
-    @a_hand = Hand.new
+    @a_hand = BlackjackHand.new
   end
 
   # def teardown
@@ -75,7 +75,7 @@ end
 class TestHandStatus < Test::Unit::TestCase
 
   def setup
-    @a_hand = Hand.new
+    @a_hand = BlackjackHand.new
   end
 
   def test_blackjack

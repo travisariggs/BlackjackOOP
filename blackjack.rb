@@ -70,18 +70,23 @@ end
 
 class Hand < Array
 
-  attr_accessor :total
-
-  def initialize
-    @total = 0
-  end
-
   def add_card(card)
     self << card
   end
 
   def cards
     self
+  end
+
+end
+
+
+class BlackjackHand < Hand
+
+  attr_accessor :total
+
+  def initialize
+    @total = 0
   end
 
   def calculate
@@ -158,7 +163,7 @@ class Dealer
     @name = 'Dealer'
 
     # Create empty hand of cards
-    @hand = Hand.new
+    @hand = BlackjackHand.new
 
   end
 
@@ -205,7 +210,7 @@ class Player
     @money = 0
 
     # Create empty hand of cards
-    @hand = Hand.new
+    @hand = BlackjackHand.new
   end
 
   def show_hand
@@ -266,14 +271,11 @@ if __FILE__ == $0
   d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
+  d.show_hand
   d.show_hand(false)
   p.show_hand
 
-  puts p.hand.calculate
-
-  #d.show_hand
-
-
+  # puts p.hand.calculate
 
 
 end
