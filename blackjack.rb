@@ -153,25 +153,29 @@ class BlackjackHand < Hand
 
 end
 
-
-class Dealer
-
+class BasePlayer
   attr_accessor :name, :hand
 
-  def initialize
-
-    @name = 'Dealer'
-
-    # Create empty hand of cards
-    @hand = BlackjackHand.new
-
+  def initialize(name)
+    @name = name
+    @hand = Hand.new
   end
 
   def add_card(card)
     @hand.add_card(card)
   end
 
-  def show_hand(mask=true)
+end
+
+
+class BlackjackBasePlayer < BasePlayer
+
+  def initialize(name)
+    @name = name
+    @hand = BlackjackHand.new
+  end
+
+  def show_hand(mask=false)
 
     total = hand.calculate
 
@@ -199,44 +203,31 @@ class Dealer
 
 end
 
-class Player
+class BlackjackPlayer < BlackjackBasePlayer
 
-  attr_accessor :name, :hand, :money
+  attr_accessor :money
 
-  def initialize(name)
-    # Input:
-    #  Player's name string
-    @name = name
-    @money = 0
+end
+
+
+class BlackjackDealer < BlackjackBasePlayer
+
+  def initialize
+
+    @name = 'Dealer'
 
     # Create empty hand of cards
     @hand = BlackjackHand.new
-  end
-
-  def show_hand
-
-    total = @hand.calculate
-
-    puts
-    puts "   #{name}'s hand is: #{total}"
-
-    @hand.each { | card |
-
-      puts ' '*10 + "  #{ card.value } of #{ card.suit }'s"
-
-    }
-
-    # Add some delay to make it easier for the user
-    #  to keep up with what is happening
-    sleep(0.5)
 
   end
 
-  def add_card(card)
-    @hand.add_card(card)
+  def show_partial_hand
+    show_hand(true)
   end
 
 end
+
+
 
 ########## Main Program ##################
 if __FILE__ == $0
@@ -255,10 +246,10 @@ if __FILE__ == $0
   #
   # puts
 
-  d = Dealer.new
+  d = BlackjackDealer.new
   d.show_hand
 
-  p = Player.new('Travis')
+  p = BlackjackPlayer.new('Travis')
   p.show_hand
 
   # Create shoe
@@ -271,8 +262,8 @@ if __FILE__ == $0
   d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
+  d.show_partial_hand
   d.show_hand
-  d.show_hand(false)
   p.show_hand
 
   # puts p.hand.calculate

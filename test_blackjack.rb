@@ -12,7 +12,7 @@ class TestCalculateHand < Test::Unit::TestCase
   # end
 
   def test_player_calc
-    p = Player.new('Travis')
+    p = BlackjackPlayer.new('Travis')
 
     p.add_card(Card.new('King', 'Spade'))
     p.add_card(Card.new('7', 'Club'))
