@@ -68,16 +68,14 @@ class Shoe
 
 end
 
-class Hand
-
-  attr_accessor :cards
-
-  def initialize
-    @cards = []
-  end
+class Hand < Array
 
   def add_card(card)
-    @cards << card
+    self << card
+  end
+
+  def cards
+    self
   end
 
 end
@@ -90,7 +88,7 @@ module HandleCards
     total = 0
     ace_count = 0
 
-    hand.cards.each do |card|
+    hand.each do |card|
 
       if ['King', 'Queen', 'Jack'].include?(card.face)
         total += 10
@@ -151,19 +149,40 @@ class Dealer
 
   include HandleCards
 
+  attr_accessor :name, :hand
+
   def initialize
 
-  end
+    @name = 'Dealer'
 
-  def show_hand
-
-  end
-
-  def ask_for_wager
+    # Create empty hand of cards
+    @hand = Hand.new
 
   end
 
-  def deal_cards
+  def add_card(card)
+    @hand.add_card(card)
+  end
+
+  def show_hand(mask=true)
+
+    total = calculate_hand(@hand)
+
+    puts
+    puts "   #{name}'s hand is: ??"
+
+    @hand.each_with_index { | card, index |
+      # Hide the second card if mask is true
+      if mask && index == 1
+        puts ' '*10 + " *** Hidden Card *** "
+      else
+        puts ' '*10 + "  #{ card[:value] } of #{ card[:suit] }'s"
+      end
+    }
+
+    # Add some delay to make it easier for the user
+    #  to keep up with what is happening
+    sleep(0.5)
 
   end
 
@@ -173,13 +192,39 @@ class Player
 
   include HandleCards
 
+  attr_accessor :name, :hand, :money
+
   def initialize(name)
     # Input:
     #  Player's name string
+    @name = name
+    @money = 0
+
+    # Create empty hand of cards
+    @hand = Hand.new
   end
 
   def show_hand
 
+    total = calculate_hand(hand)
+
+    puts
+    puts "   #{name}'s hand is: #{total}"
+
+    hand.each_with_index { | card, index |
+
+      puts ' '*10 + "  #{ card[:value] } of #{ card[:suit] }'s"
+
+    }
+
+    # Add some delay to make it easier for the user
+    #  to keep up with what is happening
+    sleep(0.5)
+
+  end
+
+  def add_card(card)
+    @hand.add_card(card)
   end
 
 end
@@ -187,16 +232,42 @@ end
 ########## Main Program ##################
 if __FILE__ == $0
 
-  card1 = Card.new('4', 'Heart')
-  card2 = Card.new('4', 'Heart')
+  # card1 = Card.new('4', 'Heart')
+  # card2 = Card.new('4', 'Heart')
+  #
+  # puts card1.show
+  #
+  # a_hand = Hand.new
+  #
+  # a_hand.add_card(card1)
+  # a_hand.add_card(card2)
+  #
+  # puts a_hand.cards
+  #
+  # puts
 
-  puts card1.show
+  d = Dealer.new
+  #d.show_hand
 
-  a_hand = Hand.new
+  p = Player.new('Travis')
+  #p.show_hand
 
-  a_hand.add_card(card1)
-  a_hand.add_card(card2)
+  # Create shoe
+  shoe = Shoe.new(2)
 
-  puts a_hand.cards
+  puts shoe.deal_a_card!
+
+  # Deal cards
+  d.add_card(shoe.deal_a_card!)
+  p.add_card(shoe.deal_a_card!)
+
+  d.add_card(shoe.deal_a_card!)
+  p.add_card(shoe.deal_a_card!)
+
+  p.show_hand
+  d.show_hand
+
+
+
 
 end
