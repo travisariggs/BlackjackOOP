@@ -4,8 +4,6 @@ require_relative 'blackjack'
 
 class TestCalculateHand < Test::Unit::TestCase
 
-  include HandleCards
-
   def setup
     @a_hand = Hand.new
   end
@@ -19,28 +17,28 @@ class TestCalculateHand < Test::Unit::TestCase
     p.add_card(Card.new('King', 'Spade'))
     p.add_card(Card.new('7', 'Club'))
 
-    assert_equal(17, p.calculate_hand(p.hand))
+    assert_equal(17, p.hand.calculate)
   end
 
   def test_king_8
     @a_hand.add_card(Card.new('King', 'Spade'))
     @a_hand.add_card(Card.new('8', 'Heart'))
 
-    assert_equal(18, calculate_hand(@a_hand))
+    assert_equal(18, @a_hand.calculate)
   end
 
   def test_jack_queen
     @a_hand.add_card(Card.new('Jack', 'Club'))
     @a_hand.add_card(Card.new('Queen', 'Heart'))
 
-    assert_equal(20, calculate_hand(@a_hand))
+    assert_equal(20, @a_hand.calculate)
   end
 
   def test_10_ace
     @a_hand.add_card(Card.new('10', 'Club'))
     @a_hand.add_card(Card.new('Ace', 'Heart'))
 
-    assert_equal(21, calculate_hand(@a_hand))
+    assert_equal(21, @a_hand.calculate)
   end
 
   def test_ace_5_10
@@ -48,7 +46,7 @@ class TestCalculateHand < Test::Unit::TestCase
     @a_hand.add_card(Card.new('5', 'Diamond'))
     @a_hand.add_card(Card.new('10', 'Club'))
 
-    assert_equal(16, calculate_hand(@a_hand))
+    assert_equal(16, @a_hand.calculate)
   end
 
   def test_ace_ace_10_7
@@ -57,7 +55,7 @@ class TestCalculateHand < Test::Unit::TestCase
     @a_hand.add_card(Card.new('10',  'Club'))
     @a_hand.add_card(Card.new('7',   'Club'))
 
-    assert_equal(19, calculate_hand(@a_hand))
+    assert_equal(19, @a_hand.calculate)
   end
 
   def test_ace_ace_ace_ace_10_9
@@ -68,7 +66,7 @@ class TestCalculateHand < Test::Unit::TestCase
     @a_hand.add_card(Card.new('10',  'Club'))
     @a_hand.add_card(Card.new('9',   'Heart'))
 
-    assert_equal(23, calculate_hand(@a_hand))
+    assert_equal(23, @a_hand.calculate)
   end
 
 end
@@ -76,22 +74,34 @@ end
 
 class TestHandStatus < Test::Unit::TestCase
 
-  include HandleCards
+  def setup
+    @a_hand = Hand.new
+  end
 
   def test_blackjack
-    assert_equal('Blackjack', hand_status?(21))
+    @a_hand.add_card(Card.new('King', 'Heart'))
+    @a_hand.add_card(Card.new('Ace', 'Heart'))
+    assert_equal('Blackjack', @a_hand.status)
   end
 
   def test_bust_22
-    assert_equal('Bust', hand_status?(22))
+    @a_hand.add_card(Card.new('King',  'Heart'))
+    @a_hand.add_card(Card.new('Queen', 'Club'))
+    @a_hand.add_card(Card.new('2',     'Spade'))
+    assert_equal('Bust', @a_hand.status)
   end
 
   def test_bust_27
-    assert_equal('Bust', hand_status?(27))
+    @a_hand.add_card(Card.new('King',  'Heart'))
+    @a_hand.add_card(Card.new('Queen', 'Club'))
+    @a_hand.add_card(Card.new('7',     'Spade'))
+    assert_equal('Bust', @a_hand.status)
   end
 
   def test_playing_7
-    assert_equal('Playing', hand_status?(7))
+    @a_hand.add_card(Card.new('3', 'Club'))
+    @a_hand.add_card(Card.new('4', 'Spade'))
+    assert_equal('Playing', @a_hand.status)
   end
 
 end

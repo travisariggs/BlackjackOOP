@@ -70,6 +70,12 @@ end
 
 class Hand < Array
 
+  attr_accessor :total
+
+  def initialize
+    @total = 0
+  end
+
   def add_card(card)
     self << card
   end
@@ -121,67 +127,18 @@ class Hand < Array
     # We've now changed as many aces
     #  to values of 1's that we could,
     #  (if we had any at all)
-    total
+    # Be sure to store the total to the object
+    @total = total
 
   end
 
-end
+  def status
 
+    calculate
 
-module HandleCards
-
-  def calculate_hand(hand)
-
-    total = 0
-    ace_count = 0
-
-    hand.each do |card|
-
-      if ['King', 'Queen', 'Jack'].include?(card.value)
-        total += 10
-      elsif card.value == 'Ace'
-        ace_count += 1
-      else
-        total += card.value.to_i
-      end
-
-    end
-
-    # Add the Aces as 11's
-    total += ace_count * 11
-
-    # Check to see if it's a bust
-    #  and reduce the '11' to a '1'
-    #  until we run out of aces or
-    #  the total goes 21 or below
-    if total > 21
-
-      ace_count.times do
-
-        # Change the 11 to a 1
-        total -= 10
-
-        # Check the total again
-        if total <= 21
-          break
-        end
-
-      end
-
-    end
-
-    # We've now changed as many aces
-    #  to values of 1's that we could,
-    #  (if we had any at all)
-    total
-
-  end
-
-  def hand_status?(hand_total)
-
-    if hand_total == 21
+    if total == 21
       status = 'Blackjack'
-    elsif hand_total > 21
+    elsif total > 21
       status = 'Bust'
     else
       status = 'Playing'
@@ -193,8 +150,6 @@ end
 
 
 class Dealer
-
-  include HandleCards
 
   attr_accessor :name, :hand
 
@@ -213,12 +168,16 @@ class Dealer
 
   def show_hand(mask=true)
 
-    total = calculate_hand(@hand)
+    total = hand.calculate
 
     puts
-    puts "   #{name}'s hand is: ??"
+    if mask
+      puts "   Dealer's hand is: ??"
+    else
+      puts "   Dealer's hand is: #{total}"
+    end
 
-    @hand.each_with_index { | card, index |
+    hand.each_with_index { | card, index |
       # Hide the second card if mask is true
       if mask && index == 1
         puts ' '*10 + " *** Hidden Card *** "
@@ -237,8 +196,6 @@ end
 
 class Player
 
-  include HandleCards
-
   attr_accessor :name, :hand, :money
 
   def initialize(name)
@@ -253,7 +210,7 @@ class Player
 
   def show_hand
 
-    total = calculate_hand(hand)
+    total = @hand.calculate
 
     puts
     puts "   #{name}'s hand is: #{total}"
@@ -309,7 +266,7 @@ if __FILE__ == $0
   d.add_card(shoe.deal_a_card!)
   p.add_card(shoe.deal_a_card!)
 
-  d.show_hand
+  d.show_hand(false)
   p.show_hand
 
   puts p.hand.calculate

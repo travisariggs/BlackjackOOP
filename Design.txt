@@ -24,18 +24,19 @@ Possible Classes:
     var Suit
     var Face Value
 
-  class Deck:
-
-    var Array of 52 Cards
-
-    method Shuffle
-
   class Shoe:
 
     var Array of Decks
 
     method Shuffle
     method Deal a Card
+
+  class Hand:
+
+    (inherit from Array)
+    method Add a card
+    method Calculate Hand
+    method Determine Status of Hand
 
 
   class Dealer:
@@ -49,11 +50,10 @@ Possible Classes:
 
   class Player
 
+    var Name
     var Hand of Cards
     var Money available
-    var Current Bet
 
     method Calculate Hand
     method Determine Status of Hand
-    method Request a hit
     method Show Cards (and total)
