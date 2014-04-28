@@ -19,6 +19,10 @@ class Card
     suit == another_card.suit && value == another_card.value
   end
 
+  def ==(another_card)
+    suit == another_card.suit && value == another_card.value
+  end
+
 end
 
 class Shoe
@@ -28,8 +32,8 @@ class Shoe
     #  Integer number of decks to use in shoe
     @num_of_decks = num_of_decks
     @MIN_SHOE_SIZE = 12
-    fill_shoe(num_of_decks)
-    shuffle_cards!
+    self.fill_shoe(num_of_decks)
+    self.shuffle_cards!
   end
 
   def fill_shoe(num_of_decks)
@@ -70,8 +74,8 @@ class Shoe
     # Make sure we have enough cards
     if num_of_cards < @MIN_SHOE_SIZE
       puts 'Shoe was getting low on cards...'
-      fill_shoe(@num_of_decks)
-      shuffle_cards!
+      self.fill_shoe(@num_of_decks)
+      self.shuffle_cards!
     end
 
     @cards.pop
@@ -103,37 +107,37 @@ class BlackjackHand < Hand
 
   def calculate
 
-    total = 0
+    current_total = 0
     ace_count = 0
 
     self.each do |card|
 
       if ['King', 'Queen', 'Jack'].include?(card.value)
-        total += 10
+        current_total += 10
       elsif card.value == 'Ace'
         ace_count += 1
       else
-        total += card.value.to_i
+        current_total += card.value.to_i
       end
 
     end
 
     # Add the Aces as 11's
-    total += ace_count * 11
+    current_total += ace_count * 11
 
     # Check to see if it's a bust
     #  and reduce the '11' to a '1'
     #  until we run out of aces or
     #  the total goes 21 or below
-    if total > 21
+    if current_total > 21
 
       ace_count.times do
 
         # Change the 11 to a 1
-        total -= 10
+        current_total -= 10
 
         # Check the total again
-        if total <= 21
+        if current_total <= 21
           break
         end
 
@@ -145,7 +149,7 @@ class BlackjackHand < Hand
     #  to values of 1's that we could,
     #  (if we had any at all)
     # Be sure to store the total to the object
-    @total = total
+    @total = current_total
 
   end
 
